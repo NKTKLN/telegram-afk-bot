@@ -30,8 +30,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 # Create an unprivileged user in advance to avoid permission issues
-RUN groupadd -g 10000 shrimp && \
-    useradd -m -u 10000 -g shrimp shrimp
+RUN groupadd -g 1000 shrimp && \
+    useradd -m -u 1000 -g shrimp shrimp
 
 WORKDIR /app
 
@@ -48,4 +48,3 @@ RUN chown -R shrimp:shrimp /app
 USER shrimp
 
 ENTRYPOINT ["python", "-m", "app.main"]
-CMD [""]
