@@ -55,7 +55,7 @@ async def start_afk_handler(event: NewMessage.Event) -> None:
     await event.edit(response)
 
 
-@client.on(events.NewMessage(pattern=r"\.unafk"))
+@client.on(events.NewMessage(outgoing=True, pattern=r"\.unafk"))
 async def start_unafk_handler(event: NewMessage.Event) -> None:
     """Handle the `.unafk` command.
 
@@ -83,7 +83,7 @@ async def start_unafk_handler(event: NewMessage.Event) -> None:
         await event.edit("**AFK mode was not active**")
 
 
-@client.on(events.NewMessage)
+@client.on(events.NewMessage(incoming=True))
 async def handle_private_message(event: NewMessage.Event) -> None:
     """Handle incoming private messages when AFK mode is active.
 
