@@ -8,6 +8,10 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
 dependencies = [
+    "telethon (>=1.41.2,<2.0.0)",
+    "pydantic (>=2.12.3,<3.0.0)",
+    "pydantic-settings (>=2.11.0,<3.0.0)",
+    "loguru (>=0.7.3,<0.8.0)",
 ]
 
 

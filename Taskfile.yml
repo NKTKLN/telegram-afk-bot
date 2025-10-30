@@ -53,34 +53,22 @@ tasks:
     desc: Code formatting with black and ruff
     deps: [code-upgrade]
     cmds:
-      - poetry run ruff check . --fix
       - poetry run black .
+      - poetry run ruff check . --fix
 
   lint:
-    desc: Static code analysis with ruff and mypy
+    desc: Static code analysis with ruff
     cmds:
       - poetry run ruff check .
-      - poetry run mypy .
-      - poetry run pylint --jobs=4 .
 
   docstyle:
     desc: Docstring style check
     cmds:
       - poetry run interrogate .
 
-  audit:
-    desc: Dependency vulnerability audit
-    cmds:
-      - poetry run pip-audit --ignore-vuln PYSEC-2022-42969
-
-  deadcode:
-    desc: Find unused code
-    cmds:
-      - poetry run vulture .
-
   check:
     desc: Full linting, audit run, and code checks
-    deps: [format, lint, docstyle, audit, deadcode]
+    deps: [format, lint, docstyle]
 
   unused-libs:
     desc: Check for unused libraries

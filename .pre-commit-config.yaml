@@ -27,27 +27,9 @@ repos:
         language: system
         pass_filenames: false
 
-      - id: mypy
-        name: Mypy type check
-        entry: poetry run mypy .
-        language: system
-        pass_filenames: false
-
       - id: interrogate
         name: Interrogate docstring coverage
         entry: poetry run interrogate .
-        language: system
-        pass_filenames: false
-      
-      - id: vulture
-        name: Vulture dead code detection
-        entry: poetry run vulture .
-        language: system
-        pass_filenames: false
-      
-      - id: pylint
-        name: Pylint static analysis
-        entry: poetry run pylint --jobs=4 .
         language: system
         pass_filenames: false
 

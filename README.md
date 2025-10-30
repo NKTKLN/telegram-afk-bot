@@ -1,126 +1,120 @@
-# 🐍 Python Project Template
+# 😴 AFK Telegram Bot
 
-**python-project-template** is a starter template for Python projects with advanced setup for code quality tools, static analysis, formatting, documentation checks, and dependency security auditing.
+A lightweight Telegram userbot that implements an AFK (Away From Keyboard) status. Automatically replies to private messages while you're away and tracks how long you've been AFK.
 
-This template includes configurations for `poetry`, `ruff`, `black`, `mypy`, `pylint`, `pre-commit`, and other popular tools, along with a ready-to-use `Taskfile.yml` for convenient task management.
+## 📦 Requirements
 
-## 📦 Dependencies
-
-* [Python 3.12+](https://www.python.org/downloads/)
+* [Python 3.13+](https://www.python.org/downloads/)
 * [Poetry](https://python-poetry.org/docs/#installation)
-* [Docker](https://docs.docker.com/get-docker/) (optional)
-* [Task](https://taskfile.dev/) (optional)
+* [Task](https://taskfile.dev/) *(optional, for task automation)*
+* A **Telegram account** (this is a **userbot**, not a regular bot)
 
-## ⚙️ Configuration & Features
+## ⚙️ Setup
 
-The project comes pre-configured with:
+### 1. Clone the Repository
 
-* Code formatting via `black`, `isort`, `ruff`
-* Static code analysis using `ruff`, `mypy`, `pylint`
-* Docstring style checks via `interrogate`
-* Dead code detection with `vulture`
-* Dependency vulnerability auditing using `pip-audit`
-* Unused library checks via `deptry`
-* `pre-commit` hooks setup for Git
+```bash
+git clone https://github.com/NKTKLN/telegram-afk-bot
+cd telegram-afk-bot
+```
 
-All settings target Python 3.12+ with a max line length of 88 characters.
+### 2. Install Dependencies
 
-## 🛠️ Installation & Usage
+```bash
+poetry install --no-root
+```
 
-### 💻 Local Setup
+### 3. Configure Environment Variables
 
-1. Make sure you have Python 3.12 or newer installed.
+Create a `.env` file in the project root:
 
-2. Install dependencies:
+```env
+API_ID=123456789
+API_HASH=your_api_hash_here
+SESSION_NAME=afk_bot              # Optional, defaults to config value
+TIMEZONE=Europe/Moscow            # Optional, defaults to UTC
+DB_PATH=bot_state.json            # Optional, where AFK state is saved
+LOG_LEVEL=INFO                    # Optional
+```
 
-   ```bash
-   poetry install --no-root
-   ```
+> You can get your API credentials here: [https://my.telegram.org/](https://my.telegram.org/)
 
-3. Install Git hooks via pre-commit:
+### 4. Log In to Telegram
 
-   ```bash
-   poetry run pre-commit install
-   ```
+```bash
+poetry run python -m app.main --login
+```
 
-4. Run the application (example module `app.main`):
+You’ll be prompted to enter:
 
-   ```bash
-   poetry run python -m app.main
-   ```
+* Your phone number
+* The verification code sent to Telegram
+* (Optional) 2FA password
 
-### 🐳 Running with Docker
+This creates a session file (e.g., `afk_bot.session`).
 
-1. Build the Docker image:
+### 5. Start the Bot
 
-   ```bash
-   docker build -t python-app .
-   ```
+```bash
+poetry run python -m app.main
+```
 
-2. Run the container:
+The bot will now listen for commands and handle private messages.
 
-   ```bash
-   docker run -it --rm python-app
-   ```
+## 🐳 Run with Docker
 
-### 🤖 Using Taskfile
+### 1. Build the Docker Image
 
-To simplify project tasks, you can use the included `Taskfile.yml`:
+```bash
+docker build -t telegram-afk-bot .
+```
 
-* Install dependencies:
+### 2. First-Time Login (Creates Session File)
 
-  ```bash
-  task install
-  ```
+```bash
+docker run -it -v $(pwd):/app telegram-afk-bot --login
+```
 
-* Format code:
+> This mounts the current directory so the session and state files are saved locally.
 
-  ```bash
-  task format
-  ```
+### 3. Run the Bot (Session Exists)
 
-* Run linting and static analysis:
+```bash
+docker run -v $(pwd):/app telegram-afk-bot
+```
 
-  ```bash
-  task lint
-  ```
+### 4. Using Docker Compose
 
-* Check docstring style:
+```bash
+docker compose up --build -d
+```
 
-  ```bash
-  task docstyle
-  ```
+## 💬 Bot Commands
 
-* Find dead code:
+| Command | Description |
+|--------|-------------|
+| `.afk` | Enable AFK mode (no message) |
+| `.afk I'm in a meeting` | Enable AFK with custom reason |
+| `.unafk` | Disable AFK and show duration |
 
-  ```bash
-  task deadcode
-  ```
+> Replies are sent **only in private chats**  
+> Each user gets **one AFK notification** per session
 
-* Audit dependencies for vulnerabilities:
+## 📊 State Management
 
-  ```bash
-  task audit
-  ```
+The bot saves its state (AFK status, start time, notified users) in `bot_state.json` (configurable via `DB_PATH`).
 
-* Run full check (formatting, linting, auditing, etc.):
+Example:
 
-  ```bash
-  task check
-  ```
+```json
+{
+  "is_afk": true,
+  "afk_message": "sleeping",
+  "afk_start_time": "2025-10-30T15:30:45.123456+03:00",
+  "notified_ids": [123456789, 987654321]
+}
+```
 
-* Run the application:
+## 📝 License
 
-  ```bash
-  task run
-  ```
-
-* Build and run Docker container:
-
-  ```bash
-  task docker
-  ```
-
-## 📜 License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+This project is licensed under the **MIT License**. See the [LICENSE.md](./LICENSE.md) file for more information.
