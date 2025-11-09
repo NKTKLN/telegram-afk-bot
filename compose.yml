@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: telegram-afk-bot
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
